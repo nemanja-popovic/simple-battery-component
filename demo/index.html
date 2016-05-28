@@ -1,0 +1,99 @@
+<!doctype html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+    <title>simple-battery-status Demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="../simple-battery-status.html">
+    <style>
+        .example {
+            width: 100px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        
+        .example simple-battery-status {
+            width: 90px;
+            margin: 0 auto;
+        }
+        
+        .controls {
+            margin: 0 auto;
+            width: 200px;
+        }
+        
+        .controls input {
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            padding: 5px 15px;
+            width: 50px;
+        }
+        
+        .controls button {
+            padding: 5px 15px;
+            background: #ccc;
+            border: 0 none;
+            cursor: pointer;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body unresolved>
+
+    <p>An example of <code>&lt;simple-battery-status&gt;&lt;/simple-battery-status&gt;</code>:</p>
+
+    <div class="example">
+        <simple-battery-status></simple-battery-status>
+    </div>
+
+
+    <p>An example of <code>&lt;simple-battery-status detect&gt;&lt;/simple-battery-status&gt;</code>:</p>
+
+    <div class="example">
+        <simple-battery-status detect></simple-battery-status>
+    </div>
+
+    <p>An example of <code>&lt;simple-battery-status&gt;&lt;/simple-battery-status&gt;</code> with values changed outside:
+    </p>
+
+    <div class="controls">
+        <input type="number" id="newLevel" min="0" max="100" value="35">
+        <button id="btnChangeLevel">Change level</button>
+    </div>
+
+    <div class="example">
+        <simple-battery-status id="simple-status" level="35"></simple-battery-status>
+
+        <script>
+            var simpleStatus = document.getElementById('simple-status');
+            var newLevel = document.getElementById('newLevel');
+            var btnChangeLevel = document.getElementById('btnChangeLevel');
+            btnChangeLevel.addEventListener('click', function() {
+                simpleStatus.setAttribute('level', newLevel.value);
+            }, false);
+        </script>
+    </div>
+
+    <p>An example of <code>&lt;simple-battery-status&gt;&lt;/simple-battery-status&gt;</code> with different styling:</p>
+
+    <div class="example">
+        <style is="custom-style">
+            .dummy-style {
+                --battery-status-full-color: green;
+                --battery-status-good-color: black;
+                --battery-status-medium-color: purple;
+                --battery-status-low-color: red;
+                --battery-status-empty-color: silver;
+            }
+        </style>
+        <simple-battery-status class="dummy-style"></simple-battery-status>
+    </div>
+
+</body>
+
+</html>

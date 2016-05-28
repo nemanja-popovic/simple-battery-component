@@ -1,0 +1,207 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+Element used to show battery status using Battery API.
+
+Example:
+
+    <simple-battery-status></simple-battery-status>
+    
+### Styling the simple battery:
+
+This battery has different colors for different levels and that can be modified using the *custom CSS property*:
+    
+    simple-battery-status {
+       --battery-status-indicator-background: gray;
+    }
+
+The following mixins are available for styling of simple battery status element:
+
+Custom property                             | Description                                 | Default
+--------------------------------------------|---------------------------------------------|----------
+--battery-status-indicator-background       | Background color of battery content         | #FFF
+--battery-status-full-color                 | Color of full battery indicator (>80%)      | #BFFF00
+--battery-status-good-color                 | Color of good battery indicator (50%-80%)   | #BDE24D
+--battery-status-medium-color               | Color of ok battery indicator (20%-50%)     | #FFFF00
+--battery-status-low-color                  | Color of low battery indicator (10%-20%)    | #FFC800
+--battery-status-empty-color                | Color of empty battery indicator (<10%)     | #FF5200
+
+@element simple-battery-status
+@demo demo/index.html
+-->
+
+<dom-module id="simple-battery-status">
+    <template>
+        <style>
+            .container {
+                font-family: Roboto, Noto, 'Trebuchet MS', sans-serif;
+            }
+            
+            #batteryEnd {
+                width: 15px;
+            }
+            
+            #batteryEnd div {
+                width: 35px;
+                height: 15px;
+                margin-left: 30px;
+                background-color: #CCC;
+            }
+            
+            #batteryBody {
+                width: 75px;
+                height: 200px;
+                border: 10px #CCC solid;
+            }
+            
+            #indicator {
+                width: 100%;
+                background-color: var(--battery-status-indicator-background, #FFF);
+            }
+
+            .full {
+                background-color: var(--battery-status-full-color, #BFFF00);
+            }
+
+            .good {
+                background-color: var(--battery-status-good-color, #BDE24D);
+            }
+
+            .medium {
+                background-color: var(--battery-status-medium-color, #FFFF00);
+            }
+
+            .low {
+                background-color: var(--battery-status-low-color, #FFC800);
+            }
+
+            .empty {
+                background-color: var(--battery-status-empty-color, #FF5200);
+            }
+            
+            #status {
+                top: 90px;
+                position: relative;
+                text-align: center;
+                width: 100%;
+                font-size: 20px;
+                font-weight: 700;
+                display: block;
+            }
+        </style>
+        
+        <div class="container">
+            <div id="batteryEnd">
+                <div></div>
+            </div>
+            <div id="batteryBody" class$="[[_calculateLevelStyle(level)]]">
+                <div id="indicator">
+                    <span id="status">[[level]]%</span>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        (function(){
+            Polymer({
+                is: 'simple-battery-status',
+
+                properties: {
+                    /**
+                     * `level` indicates level of battery 
+                     */
+                    level: {
+                        type: Number,
+                        value: 50,
+                        observer: '_levelChanged'
+                    },
+                    /**
+                     * `detect` indicates if the component will use Battery API to get 
+                     * current _state or just show provided value. When detect attribute 
+                     * provided component will use Battery API
+                     */
+                    detect: {
+                        type: Boolean,
+                        value: false
+                    }
+                },
+                
+                // Element Lifecycle
+                
+                attached: function() {
+                    // `attached` fires once the element and its parents have been inserted
+                    // into a document.
+                    //
+                    // This is a good place to perform any work related to your element's
+                    // visual _state or active behavior (measuring sizes, beginning animations,
+                    // loading resources, etc).
+                    var self = this;
+                    
+                    //Show initial level of battery
+                    self.$.indicator.style.height = (100 - self.level) + '%'; 
+                    
+                    if(!self.detect){
+                        return;
+                    }
+                    
+                    navigator.getBattery()
+                        .then(function (battery) {             
+                            //Assign level property 
+                            self.level = battery.level * 100;
+                            
+                            // //PRObABLY NOT NEEDED AS THE _LEVELCHANGED WILL BE CALLED???
+                            // //Set height of batery indicator to 100% - percentage of battery
+                            // self.$.indicator.style.height = (1 - battery.level) * 100 + '%'; 
+                            
+                            //Listen for level change event
+                            battery.addEventListener("levelchange", function(e) {
+                                self.level = battery.level * 100;
+                            }, false); 
+                        });
+                },
+
+                // Element Behavior
+                        
+                /**
+                 * `_levelChanged` is called every time battery level is changed
+                 */
+                _levelChanged: function(){
+                    var self = this;
+                    
+                    //Make sure that it is not lower than 0
+                    if(self.level < 0){
+                        self.level = 0;
+                    }
+                    if(self.level > 100){
+                        self.level = 100;
+                    }
+                    
+                    self.$.indicator.style.height = (100 - self.level) + '%';
+                },
+
+                /**
+                 * `_calculateLevelStyle` returns string that describes level
+                 */
+                _calculateLevelStyle: function(level){
+                    
+                    if(level <= 10){
+                        return 'empty';
+                    }
+                    else if(level <= 20){
+                        return 'low';
+                    }
+                    else if(level <= 50){
+                        return 'medium';
+                    }
+                    else if(level <= 80){
+                        return 'good';
+                    }
+                    
+                    return 'full';                  
+                }
+            
+            });
+        })();
+    </script>
+</dom-module>
