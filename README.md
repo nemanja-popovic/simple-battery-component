@@ -4,6 +4,16 @@ Element used to show battery status using Battery API.
 
 ![alt tag](https://raw.githubusercontent.com/nemanja-popovic/simple-battery-component/master/battery100%25.PNG)
 
+## How to use
+
+In order to use this element first add refrence to the simple-battery-status.html. Then just use the element
+
+```html
+<simple-battery-status detect></simple-battery-status>
+```
+
+anywhere in your page. Also take a look in demo/index.html file for more examples.
+
 ## Dependencies
 
 Element dependencies are managed via [Bower](http://bower.io/). You can
