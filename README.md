@@ -4,6 +4,14 @@ Element used to show battery status using Battery API.
 
 ![alt tag](https://raw.githubusercontent.com/nemanja-popovic/simple-battery-component/master/battery100%25.PNG)
 
+## How to install
+
+Install simply by executing: 
+
+    bower i simple-battery-component -S
+
+command. Bower is required and explanation how to install bower can be found in `Dependencies` part of this Readme.md file.
+
 ## How to use
 
 In order to use this element first add refrence to the simple-battery-status.html. Then just use the element
