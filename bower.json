@@ -9,7 +9,8 @@
     "web-component",
     "polymer",
     "battery",
-    "web-components"
+    "web-components",
+    "simple battery component"
   ],
   "main": "simple-battery-status.html",
   "homepage": "https://github.com/nemanja-popovic/simple-battery-component",

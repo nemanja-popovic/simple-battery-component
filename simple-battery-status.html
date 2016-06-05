@@ -150,12 +150,8 @@ Custom property                             | Description                       
                             //Assign level property 
                             self.level = battery.level * 100;
                             
-                            // //PRObABLY NOT NEEDED AS THE _LEVELCHANGED WILL BE CALLED???
-                            // //Set height of batery indicator to 100% - percentage of battery
-                            // self.$.indicator.style.height = (1 - battery.level) * 100 + '%'; 
-                            
                             //Listen for level change event
-                            battery.addEventListener("levelchange", function(e) {
+                            battery.addEventListener('levelchange', function(e) {
                                 self.level = battery.level * 100;
                             }, false); 
                         });
